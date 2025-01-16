@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+	StyledButton,
+	StyledIcon,
+	StyledUser,
+	StyledUserCard
+} from './home.styles';
 
 const Home = () => {
 	const [users, setUsers] = useState([]);
-	const [newUser, setNewUser] = useState({ name: '', email: '' });
 
 	useEffect(() => {
 		fetchUsers(setUsers);
@@ -11,25 +16,28 @@ const Home = () => {
 	return (
 		<>
 			<h1>Home</h1>
-			<form action=''>
+			<form onSubmit={event => createUser({ event })} action=''>
 				<div>
-					<input defaultValue={''} type='text' />
+					<input name='name' defaultValue={''} type='text' />
 					<span>Name & Surname</span>
 				</div>
 				<div>
-					<input defaultValue={''} type='email' />
+					<input name='email' defaultValue={''} type='email' />
 					<span>email</span>
 				</div>
 				<button type='submit'>Join us</button>
 			</form>
 			{users.length === 0 && <h2>No Users</h2>}
 			{users.map(user => (
-				<div key={user.userId}>
-					<h2>{user.name}</h2>
+				<StyledUserCard key={user.userId}>
+					<StyledUser>
+						<StyledIcon src='/assets/images/user-icon.png' alt='' />
+						<h2>{user.name}</h2>
+					</StyledUser>
 					<Link to={`/user/${user.userId}`}>
-						<button>View user Info</button>
+						<StyledButton>View user Info</StyledButton>
 					</Link>
-				</div>
+				</StyledUserCard>
 			))}
 		</>
 	);
@@ -45,8 +53,12 @@ const fetchUsers = async setUsers => {
 	}
 };
 
-const createUser = async ({ name, email }) => {
-	const newUser = { newUser };
+const createUser = async ({ event }) => {
+	event.preventDefault();
+	const newUser = {
+		name: event.target.name.value,
+		email: event.target.email.value
+	};
 	try {
 		const response = await fetch('http://localhost:3000/api/users', {
 			method: 'POST',
@@ -59,10 +71,6 @@ const createUser = async ({ name, email }) => {
 	} catch (error) {
 		console.log(error);
 	}
-};
-
-const newUser = ({ setNewUser, newName, newEmail }) => {
-	setNewUser({ name: newName, email: newEmail });
 };
 
 export default Home;

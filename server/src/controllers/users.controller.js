@@ -42,10 +42,55 @@ usersController.createNewUser = (req, res) => {
     const newData = [...jsonData, toCreate];
     fs.writeFile(pathFile, JSON.stringify(newData), (error) => {
       if (error) {
-        res.status(409).json({ error: 'Error creating user' });
+        return res.status(409).json({ error: 'Error creating user' });
       }
 
-      res.status(200).send('Data saved OK');
+      return res.status(200).json({ message: 'Data saved OK' });
+    });
+  });
+};
+
+usersController.updateUser = (req, res) => {
+  const { id } = req.params;
+  const info = req.body;
+  fs.readFile(pathFile, (error, data) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error reading file' });
+    }
+    const jsonData = JSON.parse(data);
+    const userFound = jsonData.find((user) => user.userId === id);
+
+    if (info.name) {
+      userFound.name = info.name;
+    }
+    if (info.email) {
+      userFound.email = info.email;
+    }
+
+    fs.writeFile(pathFile, JSON.stringify(jsonData), (error) => {
+      if (error) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      return res.status(200).json({ message: 'Data saved OK' });
+    });
+  });
+};
+
+usersController.deleteUser = (req, res) => {
+  const { id } = req.params;
+  fs.readFile(pathFile, (error, data) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error reading file' });
+    }
+    const jsonData = JSON.parse(data);
+    const newData = jsonData.filter((item) => item.userId !== id);
+    fs.writeFile(pathFile, JSON.stringify(newData), (error) => {
+      if (error) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.status(200).json({ message: 'User deleted successfully' });
     });
   });
 };
