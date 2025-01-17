@@ -2,24 +2,29 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	StyledButton,
+	StyledErrorMessage,
 	StyledForm,
 	StyledIcon,
 	StyledInputAndLabel,
 	StyledMain,
+	StyledRerroredInput,
 	StyledUser,
 	StyledUserCard
 } from './home.styles';
 
 const Home = () => {
 	const [users, setUsers] = useState([]);
-
+	const [mailOk, setMailOk] = useState(true);
 	useEffect(() => {
 		fetchUsers(setUsers);
 	}, []);
 	return (
 		<StyledMain>
 			<h1>Home</h1>
-			<StyledForm onSubmit={event => createUser(event, setUsers)} action=''>
+			<StyledForm
+				onSubmit={event => createUser(event, setUsers, setMailOk)}
+				action=''
+			>
 				<StyledInputAndLabel>
 					<input
 						name='name'
@@ -29,15 +34,22 @@ const Home = () => {
 					/>
 					<span>Name & Surname</span>
 				</StyledInputAndLabel>
-				<StyledInputAndLabel>
-					<input
-						name='email'
-						defaultValue={''}
-						type='email'
-						placeholder='mail@domain.com'
-					/>
-					<span>email</span>
-				</StyledInputAndLabel>
+				<StyledRerroredInput>
+					<StyledInputAndLabel>
+						<input
+							name='email'
+							defaultValue={''}
+							type='email'
+							placeholder='mail@domain.com'
+						/>
+						<span>email</span>
+					</StyledInputAndLabel>
+					{!mailOk && (
+						<StyledErrorMessage>
+							This mail has already been used
+						</StyledErrorMessage>
+					)}
+				</StyledRerroredInput>
 				<StyledButton type='submit'>Join us</StyledButton>
 			</StyledForm>
 			<div>
@@ -68,7 +80,7 @@ const fetchUsers = async setUsers => {
 	}
 };
 
-const createUser = async (event, setUsers) => {
+const createUser = async (event, setUsers, setMailOk) => {
 	event.preventDefault();
 	const newUser = {
 		name: event.target.name.value,
@@ -80,6 +92,12 @@ const createUser = async (event, setUsers) => {
 			body: JSON.stringify(newUser),
 			headers: { 'Content-Type': 'application/json' }
 		});
+
+		if (!response.ok) {
+			setMailOk(false);
+		} else {
+			setMailOk(true);
+		}
 
 		const data = await response.json();
 		setUsers(data);

@@ -14,7 +14,6 @@ const StyledForm = styled.form`
 	padding: 2rem;
 	border: 2px solid;
 	border-radius: 1rem;
-	margin-top: 2rem;
 `;
 
 const StyledRerroredInput = styled.div`
@@ -43,7 +42,7 @@ const StyledIcon = styled.img`
 const StyledUserCard = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
+	gap: 1rem;
 	border: 2px solid;
 	margin: 4rem;
 	padding: 2rem;
@@ -65,6 +64,23 @@ const StyledButton = styled.button`
 	padding-block: 1rem;
 `;
 
+const StyledButtonsContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+	width: 80%;
+	margin-top: 2rem;
+`;
+
+const StyledDeleteButton = styled.button`
+	width: 50%;
+	display: flex;
+	justify-content: center;
+	border-radius: 1rem;
+	padding-block: 1rem;
+	color: white;
+	background-color: red;
+`;
+
 export {
 	StyledIcon,
 	StyledUserCard,
@@ -74,5 +90,7 @@ export {
 	StyledForm,
 	StyledInputAndLabel,
 	StyledErrorMessage,
-	StyledRerroredInput
+	StyledRerroredInput,
+	StyledButtonsContainer,
+	StyledDeleteButton
 };

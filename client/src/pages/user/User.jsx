@@ -1,8 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import {
+	StyledButton,
+	StyledButtonsContainer,
+	StyledDeleteButton,
+	StyledErrorMessage,
+	StyledForm,
+	StyledIcon,
+	StyledInputAndLabel,
+	StyledMain,
+	StyledRerroredInput,
+	StyledUserCard
+} from './user.styles';
 
 const User = () => {
 	const [users, setUsers] = useState([]);
+	const [mailOk, setMailOk] = useState(true);
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -13,29 +26,50 @@ const User = () => {
 	//email unico por usuario error (409)
 
 	return (
-		<div>
+		<StyledMain>
 			<h1>USER</h1>
-			{users.error && <h2>USER NOT FOUND</h2>}
-			{!users && <p>Loading</p>}
-			{users && <h2>Name: {users.name}</h2>}
-			{users && <h2>Email: {users.email}</h2>}
+			<StyledUserCard>
+				{users.error && <h2>USER NOT FOUND</h2>}
+				{!users && <p>Loading</p>}
+				{users && (
+					<>
+						<StyledIcon src='/assets/images/user-icon.png' alt='' />
+						<h2>Name: {users.name}</h2>
+						<h2>Email: {users.email}</h2>
+					</>
+				)}
+			</StyledUserCard>
 
-			<form onSubmit={event => updateUser(id, event, setUsers)} action=''>
-				<div>
+			<StyledForm
+				onSubmit={event => updateUser(id, event, setUsers, setMailOk)}
+				action=''
+			>
+				<StyledInputAndLabel>
 					<span>New Name</span>
 					<input type='text' name='name' defaultValue={users.name} />
-				</div>
-				<div>
-					<span>New email</span>
-					<input type='email' name='email' defaultValue={users.email} />
-				</div>
-				<button type='submit'>Edit User</button>
-			</form>
-			<button onClick={() => deleteUser(id, navigate)}>Delete User</button>
-			<Link to='/'>
-				<button>Back to users</button>
-			</Link>
-		</div>
+				</StyledInputAndLabel>
+				<StyledRerroredInput>
+					<StyledInputAndLabel>
+						<span>New email</span>
+						<input type='email' name='email' defaultValue={users.email} />
+					</StyledInputAndLabel>
+					{!mailOk && (
+						<StyledErrorMessage>
+							This mail has already been used
+						</StyledErrorMessage>
+					)}
+				</StyledRerroredInput>
+				<StyledButton type='submit'>Edit User</StyledButton>
+			</StyledForm>
+			<StyledButtonsContainer>
+				<StyledDeleteButton onClick={() => deleteUser(id, navigate)}>
+					Delete User
+				</StyledDeleteButton>
+				<Link to='/'>
+					<StyledButton>Back to users</StyledButton>
+				</Link>
+			</StyledButtonsContainer>
+		</StyledMain>
 	);
 };
 
@@ -49,7 +83,7 @@ const fetchUserById = async (setUsers, id) => {
 	}
 };
 
-const updateUser = async (id, event, setUsers) => {
+const updateUser = async (id, event, setUsers, setMailOk) => {
 	event.preventDefault();
 	const newUser = {
 		name: event.target.name.value,
@@ -61,6 +95,11 @@ const updateUser = async (id, event, setUsers) => {
 			body: JSON.stringify(newUser),
 			headers: { 'Content-Type': 'application/json' }
 		});
+		if (!response.ok) {
+			setMailOk(false);
+		} else {
+			setMailOk(true);
+		}
 
 		const data = await response.json();
 		setUsers(data);
