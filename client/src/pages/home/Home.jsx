@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	StyledButton,
+	StyledForm,
 	StyledIcon,
+	StyledInputAndLabel,
+	StyledMain,
 	StyledUser,
 	StyledUserCard
 } from './home.styles';
@@ -14,32 +17,44 @@ const Home = () => {
 		fetchUsers(setUsers);
 	}, []);
 	return (
-		<>
+		<StyledMain>
 			<h1>Home</h1>
-			<form onSubmit={event => createUser({ event })} action=''>
-				<div>
-					<input name='name' defaultValue={''} type='text' />
+			<StyledForm onSubmit={event => createUser(event, setUsers)} action=''>
+				<StyledInputAndLabel>
+					<input
+						name='name'
+						defaultValue={''}
+						type='text'
+						placeholder='Name & Surname'
+					/>
 					<span>Name & Surname</span>
-				</div>
-				<div>
-					<input name='email' defaultValue={''} type='email' />
+				</StyledInputAndLabel>
+				<StyledInputAndLabel>
+					<input
+						name='email'
+						defaultValue={''}
+						type='email'
+						placeholder='mail@domain.com'
+					/>
 					<span>email</span>
-				</div>
-				<button type='submit'>Join us</button>
-			</form>
-			{users.length === 0 && <h2>No Users</h2>}
-			{users.map(user => (
-				<StyledUserCard key={user.userId}>
-					<StyledUser>
-						<StyledIcon src='/assets/images/user-icon.png' alt='' />
-						<h2>{user.name}</h2>
-					</StyledUser>
-					<Link to={`/user/${user.userId}`}>
-						<StyledButton>View user Info</StyledButton>
-					</Link>
-				</StyledUserCard>
-			))}
-		</>
+				</StyledInputAndLabel>
+				<StyledButton type='submit'>Join us</StyledButton>
+			</StyledForm>
+			<div>
+				{users.length === 0 && <h2>No Users</h2>}
+				{users.map(user => (
+					<StyledUserCard key={user.userId}>
+						<StyledUser>
+							<StyledIcon src='/assets/images/user-icon.png' alt='' />
+							<h2>{user.name}</h2>
+						</StyledUser>
+						<Link to={`/user/${user.userId}`}>
+							<StyledButton>View user Info</StyledButton>
+						</Link>
+					</StyledUserCard>
+				))}
+			</div>
+		</StyledMain>
 	);
 };
 
@@ -53,7 +68,7 @@ const fetchUsers = async setUsers => {
 	}
 };
 
-const createUser = async ({ event }) => {
+const createUser = async (event, setUsers) => {
 	event.preventDefault();
 	const newUser = {
 		name: event.target.name.value,
@@ -66,8 +81,8 @@ const createUser = async ({ event }) => {
 			headers: { 'Content-Type': 'application/json' }
 		});
 
-		const data = await response.json;
-		console.log(data);
+		const data = await response.json();
+		setUsers(data);
 	} catch (error) {
 		console.log(error);
 	}

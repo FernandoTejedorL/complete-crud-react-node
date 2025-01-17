@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const User = () => {
 	const [users, setUsers] = useState([]);
 	const { id } = useParams();
-	console.log(users.error);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		fetchUserById(setUsers, id);
 	}, [id]);
+
+	//email unico por usuario error (409)
 
 	return (
 		<div>
@@ -18,7 +20,7 @@ const User = () => {
 			{users && <h2>Name: {users.name}</h2>}
 			{users && <h2>Email: {users.email}</h2>}
 
-			<form onSubmit={event => updateUser({ id, event })} action=''>
+			<form onSubmit={event => updateUser(id, event, setUsers)} action=''>
 				<div>
 					<span>New Name</span>
 					<input type='text' name='name' defaultValue={users.name} />
@@ -29,7 +31,7 @@ const User = () => {
 				</div>
 				<button type='submit'>Edit User</button>
 			</form>
-			<button onClick={() => deleteUser({ id })}>Delete User</button>
+			<button onClick={() => deleteUser(id, navigate)}>Delete User</button>
 			<Link to='/'>
 				<button>Back to users</button>
 			</Link>
@@ -47,7 +49,7 @@ const fetchUserById = async (setUsers, id) => {
 	}
 };
 
-const updateUser = async ({ id, event }) => {
+const updateUser = async (id, event, setUsers) => {
 	event.preventDefault();
 	const newUser = {
 		name: event.target.name.value,
@@ -60,21 +62,21 @@ const updateUser = async ({ id, event }) => {
 			headers: { 'Content-Type': 'application/json' }
 		});
 
-		const data = await response.json;
-		console.log(data);
+		const data = await response.json();
+		setUsers(data);
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-const deleteUser = async ({ id }) => {
+const deleteUser = async (id, navigate) => {
 	try {
 		const response = await fetch(`http://localhost:3000/api/users/${id}`, {
 			method: 'DELETE'
 		});
 
-		const data = await response.json();
-		console.log(data);
+		await response.json();
+		navigate('/');
 	} catch (error) {
 		console.log(error);
 	}

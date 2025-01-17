@@ -42,10 +42,10 @@ usersController.createNewUser = (req, res) => {
     const newData = [...jsonData, toCreate];
     fs.writeFile(pathFile, JSON.stringify(newData), (error) => {
       if (error) {
-        return res.status(409).json({ error: 'Error creating user' });
+        return res.status(500).json({ error: 'Error creating user' });
       }
 
-      return res.status(200).json({ message: 'Data saved OK' });
+      return res.status(200).json(newData);
     });
   });
 };
@@ -58,21 +58,16 @@ usersController.updateUser = (req, res) => {
       return res.status(500).json({ error: 'Error reading file' });
     }
     const jsonData = JSON.parse(data);
-    const userFound = jsonData.find((user) => user.userId === id);
+    const userFoundIndex = jsonData.findIndex((user) => user.userId === id);
 
-    if (info.name) {
-      userFound.name = info.name;
-    }
-    if (info.email) {
-      userFound.email = info.email;
-    }
+    jsonData[userFoundIndex] = { ...jsonData[userFoundIndex], ...info };
 
     fs.writeFile(pathFile, JSON.stringify(jsonData), (error) => {
       if (error) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      return res.status(200).json({ message: 'Data saved OK' });
+      return res.status(200).json(jsonData[userFoundIndex]);
     });
   });
 };
