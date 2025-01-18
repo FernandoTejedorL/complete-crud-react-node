@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { COLORS } from '../../styles/Colors';
 
 const StyledMain = styled.main`
 	display: flex;
@@ -14,6 +15,10 @@ const StyledForm = styled.form`
 	padding: 2rem;
 	border: 2px solid;
 	border-radius: 1rem;
+	margin-top: 2rem;
+	background-color: ${COLORS.darkGreen};
+	color: ${COLORS.primary};
+	border: 2px solid ${COLORS.lightGreen};
 `;
 
 const StyledRerroredInput = styled.div`
@@ -42,11 +47,14 @@ const StyledIcon = styled.img`
 const StyledUserCard = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	gap: 2rem;
 	border: 2px solid;
 	margin: 4rem;
 	padding: 2rem;
 	border-radius: 1rem;
+	background-color: ${COLORS.darkGreen};
+	color: ${COLORS.primary};
+	border: 2px solid ${COLORS.lightGreen};
 `;
 
 const StyledUser = styled.div`
@@ -62,6 +70,16 @@ const StyledButton = styled.button`
 	justify-content: center;
 	border-radius: 1rem;
 	padding-block: 1rem;
+	background-color: ${COLORS.lightGreen};
+	color: ${COLORS.primary};
+	border: none;
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: green;
+			color: white;
+		}
+	}
 `;
 
 const StyledButtonsContainer = styled.div`
@@ -78,7 +96,22 @@ const StyledDeleteButton = styled.button`
 	border-radius: 1rem;
 	padding-block: 1rem;
 	color: white;
-	background-color: red;
+	background-color: brown;
+	border: none;
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: red;
+		}
+	}
+`;
+
+const StyledTextInput = styled.input`
+	border-radius: 0.5rem;
+	background-color: ${COLORS.lightGreen};
+	border: none;
+	padding: 0.5rem;
+	color: darkorchid;
 `;
 
 export {
@@ -92,5 +125,6 @@ export {
 	StyledErrorMessage,
 	StyledRerroredInput,
 	StyledButtonsContainer,
-	StyledDeleteButton
+	StyledDeleteButton,
+	StyledTextInput
 };

@@ -10,6 +10,7 @@ import {
 	StyledInputAndLabel,
 	StyledMain,
 	StyledRerroredInput,
+	StyledTextInput,
 	StyledUserCard
 } from './user.styles';
 
@@ -46,12 +47,16 @@ const User = () => {
 			>
 				<StyledInputAndLabel>
 					<span>New Name</span>
-					<input type='text' name='name' defaultValue={users.name} />
+					<StyledTextInput type='text' name='name' defaultValue={users.name} />
 				</StyledInputAndLabel>
 				<StyledRerroredInput>
 					<StyledInputAndLabel>
 						<span>New email</span>
-						<input type='email' name='email' defaultValue={users.email} />
+						<StyledTextInput
+							type='email'
+							name='email'
+							defaultValue={users.email}
+						/>
 					</StyledInputAndLabel>
 					{!mailOk && (
 						<StyledErrorMessage>

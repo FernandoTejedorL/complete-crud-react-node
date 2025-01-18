@@ -8,6 +8,7 @@ import {
 	StyledInputAndLabel,
 	StyledMain,
 	StyledRerroredInput,
+	StyledTextInput,
 	StyledUser,
 	StyledUserCard
 } from './home.styles';
@@ -26,21 +27,23 @@ const Home = () => {
 				action=''
 			>
 				<StyledInputAndLabel>
-					<input
+					<StyledTextInput
 						name='name'
 						defaultValue={''}
 						type='text'
 						placeholder='Name & Surname'
+						required
 					/>
 					<span>Name & Surname</span>
 				</StyledInputAndLabel>
 				<StyledRerroredInput>
 					<StyledInputAndLabel>
-						<input
+						<StyledTextInput
 							name='email'
 							defaultValue={''}
 							type='email'
 							placeholder='mail@domain.com'
+							required
 						/>
 						<span>email</span>
 					</StyledInputAndLabel>
