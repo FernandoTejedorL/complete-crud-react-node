@@ -13,6 +13,7 @@ import {
 	StyledTextInput,
 	StyledUserCard
 } from './user.styles';
+import { deleteDataById, getDataById } from '../../utils/api';
 
 const User = () => {
 	const [users, setUsers] = useState([]);
@@ -23,8 +24,6 @@ const User = () => {
 	useEffect(() => {
 		fetchUserById(setUsers, id);
 	}, [id]);
-
-	//email unico por usuario error (409)
 
 	return (
 		<StyledMain>
@@ -79,13 +78,8 @@ const User = () => {
 };
 
 const fetchUserById = async (setUsers, id) => {
-	try {
-		const response = await fetch(`http://localhost:3000/api/users/${id}`);
-		const users = await response.json();
-		setUsers(users);
-	} catch (error) {
-		console.log(error);
-	}
+	const data = await getDataById(id);
+	setUsers(data);
 };
 
 const updateUser = async (id, event, setUsers, setMailOk) => {
@@ -115,11 +109,7 @@ const updateUser = async (id, event, setUsers, setMailOk) => {
 
 const deleteUser = async (id, navigate) => {
 	try {
-		const response = await fetch(`http://localhost:3000/api/users/${id}`, {
-			method: 'DELETE'
-		});
-
-		await response.json();
+		await deleteDataById(id);
 		navigate('/');
 	} catch (error) {
 		console.log(error);

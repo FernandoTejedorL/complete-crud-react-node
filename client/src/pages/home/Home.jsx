@@ -12,6 +12,7 @@ import {
 	StyledUser,
 	StyledUserCard
 } from './home.styles';
+import { getAllData } from '../../utils/api';
 
 const Home = () => {
 	const [users, setUsers] = useState([]);
@@ -74,13 +75,8 @@ const Home = () => {
 };
 
 const fetchUsers = async setUsers => {
-	try {
-		const response = await fetch('http://localhost:3000/api/users');
-		const users = await response.json();
-		setUsers(users);
-	} catch (error) {
-		console.log(error);
-	}
+	const data = await getAllData();
+	setUsers(data);
 };
 
 const createUser = async (event, setUsers, setMailOk) => {
