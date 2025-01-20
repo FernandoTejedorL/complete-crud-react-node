@@ -20,6 +20,7 @@ const Home = () => {
 	useEffect(() => {
 		fetchUsers(setUsers);
 	}, []);
+	
 	return (
 		<StyledMain>
 			<h1>Home</h1>
