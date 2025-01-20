@@ -9,6 +9,7 @@ const getAllData = async () => {
 
 const getDataById = async id => {
 	const response = await fetch(URL + API_URL + id);
+
 	const users = await response.json();
 	return users;
 };
