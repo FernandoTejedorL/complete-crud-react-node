@@ -13,7 +13,7 @@ import {
 	StyledTextInput,
 	StyledUserCard
 } from './user.styles';
-import { deleteDataById, getDataById } from '../../utils/api';
+import { deleteDataById, getDataById, updateDataById } from '../../utils/api';
 
 const User = () => {
 	const [users, setUsers] = useState([]);
@@ -88,23 +88,8 @@ const updateUser = async (id, event, setUsers, setMailOk) => {
 		name: event.target.name.value,
 		email: event.target.email.value
 	};
-	try {
-		const response = await fetch(`http://localhost:3000/api/users/${id}`, {
-			method: 'PATCH',
-			body: JSON.stringify(newUser),
-			headers: { 'Content-Type': 'application/json' }
-		});
-		if (!response.ok) {
-			setMailOk(false);
-		} else {
-			setMailOk(true);
-		}
-
-		const data = await response.json();
-		setUsers(data);
-	} catch (error) {
-		console.log(error);
-	}
+	const data = await updateDataById(id, newUser, setMailOk);
+	setUsers(data);
 };
 
 const deleteUser = async (id, navigate) => {

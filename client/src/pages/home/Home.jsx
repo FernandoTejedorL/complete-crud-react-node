@@ -12,7 +12,7 @@ import {
 	StyledUser,
 	StyledUserCard
 } from './home.styles';
-import { getAllData } from '../../utils/api';
+import { createData, getAllData } from '../../utils/api';
 
 const Home = () => {
 	const [users, setUsers] = useState([]);
@@ -20,7 +20,7 @@ const Home = () => {
 	useEffect(() => {
 		fetchUsers(setUsers);
 	}, []);
-	
+
 	return (
 		<StyledMain>
 			<h1>Home</h1>
@@ -82,28 +82,14 @@ const fetchUsers = async setUsers => {
 
 const createUser = async (event, setUsers, setMailOk) => {
 	event.preventDefault();
+
 	const newUser = {
 		name: event.target.name.value,
 		email: event.target.email.value
 	};
-	try {
-		const response = await fetch('http://localhost:3000/api/users', {
-			method: 'POST',
-			body: JSON.stringify(newUser),
-			headers: { 'Content-Type': 'application/json' }
-		});
 
-		if (!response.ok) {
-			setMailOk(false);
-		} else {
-			setMailOk(true);
-		}
-
-		const data = await response.json();
-		setUsers(data);
-	} catch (error) {
-		console.log(error);
-	}
+	const data = await createData(newUser, setMailOk);
+	setUsers(data);
 };
 
 export default Home;

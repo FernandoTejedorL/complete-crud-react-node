@@ -9,9 +9,29 @@ const getAllData = async () => {
 
 const getDataById = async id => {
 	const response = await fetch(URL + API_URL + id);
-
 	const users = await response.json();
 	return users;
+};
+
+const createData = async (newUser, setMailOk) => {
+	try {
+		const response = await fetch(URL + API_URL, {
+			method: 'POST',
+			body: JSON.stringify(newUser),
+			headers: { 'Content-Type': 'application/json' }
+		});
+
+		if (!response.ok) {
+			setMailOk(false);
+		} else {
+			setMailOk(true);
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const deleteDataById = async id => {
@@ -26,4 +46,24 @@ const deleteDataById = async id => {
 	}
 };
 
-export { getAllData, getDataById, deleteDataById };
+const updateDataById = async (id, newUser, setMailOk) => {
+	try {
+		const response = await fetch(URL + API_URL + id, {
+			method: 'PATCH',
+			body: JSON.stringify(newUser),
+			headers: { 'Content-Type': 'application/json' }
+		});
+		if (!response.ok) {
+			setMailOk(false);
+		} else {
+			setMailOk(true);
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export { getAllData, getDataById, createData, deleteDataById, updateDataById };
