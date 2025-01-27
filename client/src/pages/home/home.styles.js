@@ -26,7 +26,6 @@ const StyledRerroredInput = styled.div`
 	flex-direction: column;
 `;
 
-
 const StyledInputAndLabel = styled.div`
 	display: flex;
 	align-items: center;
